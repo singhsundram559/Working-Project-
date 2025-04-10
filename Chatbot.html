@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartFix AI Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .chat-container {
+      width: 90%;
+      max-width: 400px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background-color: #4a90e2;
+      padding: 15px;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .chat-history {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-bubble {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 10px;
+      max-width: 80%;
+    }
+
+    .user {
+      background: #d1e7dd;
+      align-self: flex-end;
+    }
+
+    .bot {
+      background: #f8d7da;
+      align-self: flex-start;
+    }
+
+    .chat-input-area {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input-area select, .chat-input-area button {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      margin-right: 5px;
+    }
+
+    .chat-input-area button:last-child {
+      margin-right: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">SmartFix AI Assistant</div>
+    <div class="chat-history" id="chat-history"></div>
+    <div class="chat-input-area">
+      <select id="device-select">
+        <option value="">Select device</option>
+        <option>Smart Bulb</option>
+        <option>Smart Lock</option>
+        <option>Wi-Fi Router</option>
+        <option>Smart Thermostat</option>
+        <option>Smart TV</option>
+      </select>
+    </div>
+    <div class="chat-input-area">
+      <select id="issue-select">
+        <option value="">Select issue</option>
+        <option value="device not turning on">Device not turning on</option>
+        <option value="not connecting to wi-fi">Not connecting to Wi-Fi</option>
+        <option value="unresponsive">Unresponsive</option>
+        <option value="slow performance">Slow performance</option>
+        <option value="overheating">Overheating</option>
+        <option value="app not detecting device">App not detecting device</option>
+        <option value="voice command not working">Voice command not working</option>
+      </select>
+      <button onclick="handleIssueSelection()">Send</button>
+    </div>
+    <div class="chat-input-area">
+      <button onclick="clearChat()">Restart</button>
+    </div>
+  </div>
+
+  <script>
+    const chatHistory = document.getElementById('chat-history');
+    const deviceSelect = document.getElementById('device-select');
+    const issueSelect = document.getElementById('issue-select');
+
+    const issues = {
+      "device not turning on": "Please ensure the device is plugged in and power source is active.",
+      "not connecting to wi-fi": "Try restarting your router and checking the device's Wi-Fi settings.",
+      "unresponsive": "Try resetting the device or checking if it's still connected to the app.",
+      "slow performance": "Close unused apps and restart your device.",
+      "overheating": "Turn off the device for a few minutes to let it cool down.",
+      "app not detecting device": "Ensure both device and app are on the same network and Bluetooth is enabled.",
+      "voice command not working": "Check microphone permissions and re-sync with your voice assistant."
+    };
+
+    function appendMessage(text, sender) {
+      const msg = document.createElement('div');
+      msg.className = `chat-bubble ${sender}`;
+      msg.textContent = text;
+      chatHistory.appendChild(msg);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    function handleIssueSelection() {
+      const device = deviceSelect.value;
+      const issue = issueSelect.value;
+
+      if (!device) {
+        appendMessage("Please select a device first.", "bot");
+        return;
+      }
+
+      if (!issue) {
+        appendMessage("Please select an issue.", "bot");
+        return;
+      }
+
+      appendMessage(`Device: ${device}\nIssue: ${issue}`, "user");
+      appendMessage(`Solution: ${issues[issue]}`, "bot");
+    }
+
+    function clearChat() {
+      chatHistory.innerHTML = '';
+      deviceSelect.value = '';
+      issueSelect.value = '';
+      appendMessage("Hi! I'm SmartFix AI Assistant. Please select your smart device and the issue you're facing.", "bot");
+    }
+
+    // Initial greeting
+    clearChat();
+  </script>
+</body>
+</html>
